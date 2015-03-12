@@ -4,6 +4,33 @@ var width = 325,
     innerRadius = 35,
     pi = Math.PI;
 
+var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .html(function(d) { return d.data.tooltip; })
+            .offset(function(d,n){ 
+              console.log(n); 
+              switch(n) {
+                case 0:
+                  return [10, 20]
+                  break;
+                case 1:
+                  return [90, 15];
+                  break;
+                case 2:
+                  return [70, 5];
+                  break;
+                case 3:
+                  return [70, -5];
+                  break;
+                case 4: 
+                  return [60, -20];
+                  break;
+                case 5:
+                  return [50, 5];
+                  break;
+              }
+            });
+
 var pie = d3.layout.pie()
     .sort(null)
     .value(function(d) { return 1; });
@@ -16,10 +43,10 @@ var arc = d3.svg.arc()
 
 var edge = d3.svg.arc()
   .innerRadius(function (d) { 
-    return ((radius - innerRadius) * (d.data.score / 100.0) + innerRadius) - 1; 
+    return ((radius - innerRadius) * (d.data.score / 100.0) + innerRadius) - 2; 
   })
   .outerRadius(function (d) { 
-    return ((radius - innerRadius) * (d.data.score / 100.0) + innerRadius)+1; 
+    return ((radius - innerRadius) * (d.data.score / 100.0) + innerRadius) + 2; 
   });
 
 var outlineArc = d3.svg.arc()
@@ -48,14 +75,18 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 
+svg.call(tip);
+
+
 d3.json('data.json', function(error, dat) {
 
-  data = dat.data;
+  var data = dat.data;
 
   data.forEach(function(d, n) {
     d.id    = d.id;
     d.score = d.value;
     d.outer = (radius - innerRadius) * (d.value / 100.0) + innerRadius; 
+    d.tooltip = "<span class=\"omod\">Order<br>Modification:</span><br>" + d.value;
 
     switch(d.type) {
       case 'days':
@@ -69,6 +100,7 @@ d3.json('data.json', function(error, dat) {
           d.score = "90";
           d.class= "good";
         }
+        d.tooltip += " days";
         break;
       case 'perc':
         if(d.value <= 33) {
@@ -81,6 +113,7 @@ d3.json('data.json', function(error, dat) {
           d.score = 30;
           d.class = "poor";
         }
+        d.tooltip += "%";
         break;
       case 'items':
         if(d.value <= 20 ) {
@@ -93,46 +126,48 @@ d3.json('data.json', function(error, dat) {
           d.score = 90;
           d.class = "good";
         }
+        d.tooltip += " items"; 
         break;
     }
   });
-  
-  var path = svg.selectAll(".solidArc")
+  //draw the wedges
+  var mainArc = svg.selectAll(".solidArc")
       .data(pie(data))
     .enter().append("path")
       .attr("fill", "#757373")
       .attr("class", function(d) { return "solidArc " + d.data.class; })
       .attr("stroke", "gray")
-      .attr("d", arc);
-  var inner = svg.selectAll(".innerGrid")
-      .data(pie(data))
-      .enter().append("path")
+      .attr("d", arc)
+    .on("mouseover", tip.show)
+    .on("mouseout", tip.hide);
+
+  //draw concentric rings
+  svg.append("path")
       .attr("fill", "none")
       .attr("stroke", "#b5b4b4")
       .attr("class", "innerGrid")
       .attr("d", innerGrid);
-  var mid = svg.selectAll(".middleGrid")
-      .data(pie(data))
-      .enter().append("path")
+  svg.append("path")
       .attr("fill", "none")
       .attr("stroke", "#b5b4b4")
       .attr("class", "middleGrid")
       .attr("d", middleGrid);
-  var outer = svg.selectAll(".outerGrid")
-      .data(pie(data))
-      .enter().append("path")
+  svg.append("path")
       .attr("fill", "none")
       .attr("stroke", "#b5b4b4")
       .attr("class", "outerGrid")
       .attr("d", outerGrid);
-  var path = svg.selectAll(".edge")
+
+  //colored edges on wedges
+  svg.selectAll(".edge")
       .data(pie(data))
     .enter().append("path")
       .attr("fill", "none")
       .attr("class", function(d) { return "edge " + d.data.class; })
       .attr("d", edge);
 
-  var outerPath = svg.selectAll(".outlineArc")
+  //outermost circle
+  svg.selectAll(".outlineArc")
       .data(pie(data))
     .enter().append("path")
       .attr("fill", "none")
@@ -140,20 +175,9 @@ d3.json('data.json', function(error, dat) {
       .attr("class", "outlineArc")
       .attr("d", outlineArc);  
 
-
-
- // // calculate the weighted mean score
- // var score = 
- //   data.reduce(function(a, b) {
- //     //console.log('a:' + a + ', b.score: ' + b.score + ', b.weight: ' + b.weight);
- //     return a + (b.score * b.weight); 
- //   }, 0) / 
- //   data.reduce(function(a, b) { 
- //     return a + b.weight; 
- //   }, 0);
-
+  //bang in the center
   svg.append("svg:text")
-    .attr("class", "aster-score")
+    .attr("class", "bang")
     .attr("dy", ".35em")
     .attr("text-anchor", "middle") // text-align: right
     .text("!");
