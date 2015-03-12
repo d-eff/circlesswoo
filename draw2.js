@@ -3,7 +3,9 @@ var width = 400,
     radius = 325 / 2,
     innerRadius = 35,
     pi = Math.PI,
-    outers = {1: "outer ", 3: "outer ", 5: "outer "};
+    outers = {1: "outer ", 3: "outer ", 5: "outer "},
+    totalScore = 0,
+    strank = "";
 
 var tip = d3.tip()
             .attr('class', 'd3-tip')
@@ -156,6 +158,20 @@ d3.json('data.json', function(error, dat) {
         outers[n] += "poor";
       }
     }
+
+    totalScore += +d.score;
+
+    if(n===5){
+      console.log(totalScore);
+      if(totalScore >= 360) {
+        strank = "good";
+      } else if(totalScore >= 180) {
+        strank = "okay";
+      } else {
+        strank = "poor";
+      }
+    }
+    
   });
   //draw the wedges
   var mainArc = svg.selectAll(".solidArc")
@@ -196,14 +212,39 @@ d3.json('data.json', function(error, dat) {
       .attr("d", edge);
 
   svg.append("path")
+      .attr("id", "topRight")
       .attr("class", outers[1])
       .attr("d", topRight);
   svg.append("path")
+      .attr("id", "bottom")
       .attr("class", outers[3])
       .attr("d", topLeft);
   svg.append("path")
+      .attr("id", "topLeft")
       .attr("class", outers[5])
       .attr("d", bottom);
+
+  svg.append("text")
+      .attr("x", 150)
+      .attr("dy", -10)
+    .append("textPath")
+      .attr("stroke","white")
+      .attr("xlink:href","#topRight")
+      .text("Late Additions");
+  svg.append("text")
+      .attr("x", 150)
+      .attr("dy", -10)
+    .append("textPath")
+      .attr("stroke","white")
+      .attr("xlink:href","#bottom")
+      .text("Transfers In");
+  svg.append("text")
+      .attr("x", 150)
+      .attr("dy", -10)
+    .append("textPath")
+      .attr("stroke","white")
+      .attr("xlink:href","#topLeft")
+      .text("Order Modifications");
 
 
   //outermost circle
@@ -215,11 +256,17 @@ d3.json('data.json', function(error, dat) {
       .attr("class", "outlineArc")
       .attr("d", outlineArc);  
 
+  svg.append("circle")
+      .attr("cx", 1)
+      .attr("cy", 0)
+      .attr("class", function(d) { return "overall " + strank; })
+      .attr("r", 20);
+
   //bang in the center
   svg.append("svg:text")
     .attr("class", "bang")
     .attr("dy", ".35em")
-    .attr("text-anchor", "middle") // text-align: right
+    .attr("text-anchor", "middle")
     .text("!");
 
 });

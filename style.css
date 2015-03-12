@@ -23,16 +23,19 @@ body {
 .poor:hover {
   fill: rgba(251,150,152,0.7);
 }
+.overall.good,
 .outer.good,
 .edge.good {
   stroke: rgb(152,255,213);
   fill: rgb(152,255,213);
 }
+.overall.okay,
 .outer.okay,
 .edge.okay {
   stroke: rgb(237,192,140);
   fill: rgb(237,192,140);
 }
+.overall.poor,
 .outer.poor,
 .edge.poor {
   stroke: rgb(251,150,152);
@@ -54,6 +57,8 @@ body {
   line-height: 1;
   font-weight: bold;
   font-size: 300%;
+  stroke: white;
+  fill: white;
 }
 
 .d3-tip {
