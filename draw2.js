@@ -1,14 +1,14 @@
-var width = 325,
-    height = 325,
-    radius = Math.min(width, height) / 2,
+var width = 400,
+    height = 400,
+    radius = 325 / 2,
     innerRadius = 35,
-    pi = Math.PI;
+    pi = Math.PI,
+    outers = {1: "outer ", 3: "outer ", 5: "outer "};
 
 var tip = d3.tip()
             .attr('class', 'd3-tip')
             .html(function(d) { return d.data.tooltip; })
             .offset(function(d,n){ 
-              console.log(n); 
               switch(n) {
                 case 0:
                   return [10, 20]
@@ -67,6 +67,22 @@ var outerGrid = d3.svg.arc()
       .outerRadius(150)
       .startAngle(0)
       .endAngle(2*pi); 
+
+var topRight = d3.svg.arc()
+      .innerRadius(168)
+      .outerRadius(170)
+      .startAngle(0.1)
+      .endAngle(2);
+var bottom = d3.svg.arc()
+      .innerRadius(168)
+      .outerRadius(170)
+      .startAngle(2.18)
+      .endAngle(4.1);
+var topLeft = d3.svg.arc()
+      .innerRadius(168)
+      .outerRadius(170)
+      .startAngle(4.27)
+      .endAngle(6.2);
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -129,6 +145,17 @@ d3.json('data.json', function(error, dat) {
         d.tooltip += " items"; 
         break;
     }
+
+    if(n%2 === 1) {
+      var avg = data[n].score + data[n-1].score / 2;
+      if(avg >= 120) {
+        outers[n] += "good";   
+      } else if(avg >= 90) {
+        outers[n] += "okay";
+      } else {
+        outers[n] += "poor";
+      }
+    }
   });
   //draw the wedges
   var mainArc = svg.selectAll(".solidArc")
@@ -158,6 +185,8 @@ d3.json('data.json', function(error, dat) {
       .attr("class", "outerGrid")
       .attr("d", outerGrid);
 
+
+
   //colored edges on wedges
   svg.selectAll(".edge")
       .data(pie(data))
@@ -165,6 +194,17 @@ d3.json('data.json', function(error, dat) {
       .attr("fill", "none")
       .attr("class", function(d) { return "edge " + d.data.class; })
       .attr("d", edge);
+
+  svg.append("path")
+      .attr("class", outers[1])
+      .attr("d", topRight);
+  svg.append("path")
+      .attr("class", outers[3])
+      .attr("d", topLeft);
+  svg.append("path")
+      .attr("class", outers[5])
+      .attr("d", bottom);
+
 
   //outermost circle
   svg.selectAll(".outlineArc")

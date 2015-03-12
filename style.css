@@ -23,14 +23,17 @@ body {
 .poor:hover {
   fill: rgba(251,150,152,0.7);
 }
+.outer.good,
 .edge.good {
   stroke: rgb(152,255,213);
   fill: rgb(152,255,213);
 }
+.outer.okay,
 .edge.okay {
   stroke: rgb(237,192,140);
   fill: rgb(237,192,140);
 }
+.outer.poor,
 .edge.poor {
   stroke: rgb(251,150,152);
   fill: rgb(251,150,152);
