@@ -1,0 +1,64 @@
+body {
+  font: 10px sans-serif;
+  background-color: black;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.bar {
+  fill: orange;
+}
+
+.good:hover {
+  fill: rgba(152,255,213,0.7);
+}
+.okay:hover {
+  fill: rgba(237,192,140,0.7);
+}
+.poor:hover {
+  fill: rgba(251,150,152,0.7);
+}
+.edge.good {
+  stroke: rgb(152,255,213);
+  fill: rgb(152,255,213);
+}
+.edge.okay {
+  stroke: rgb(237,192,140);
+  fill: rgb(237,192,140);
+}
+.edge.poor {
+  stroke: rgb(251,150,152);
+  fill: rgb(251,150,152);
+}
+
+.solidArc {
+    -moz-transition: all 0.3s;
+    -o-transition: all 0.3s;
+    -webkit-transition: all 0.3s;
+    transition: all 0.3s;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.aster-score { 
+  line-height: 1;
+  font-weight: bold;
+  font-size: 300%;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+

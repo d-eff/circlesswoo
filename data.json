@@ -1,0 +1,30 @@
+{"data":[{
+  "id": "late adds one",
+  "value": 15,
+  "type": "days"
+},
+{
+  "id": "late adds two",
+  "value": 20,
+  "type": "perc"
+},
+{
+  "id": "transfers in one",
+  "value": 25,
+  "type": "items"
+},
+{
+  "id": "transfers in two",
+  "value": 15,
+  "type": "days"
+},
+{
+  "id": "order mods one",
+  "value": 90,
+  "type": "perc"
+},
+{
+  "id": "order mods two",
+  "value": 55,
+  "type": "perc"
+}]}

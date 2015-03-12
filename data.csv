@@ -1,0 +1,7 @@
+"id","order","score","weight","color","label"
+"FIS",3,2,1,"#9E0041","Fisheries"
+"MAR",2,24,1,"#C32F4B","Mariculture"
+"AO",1,98,1,"#E1514B","Artisanal Fishing Opportunities"
+"NP",4,60,1,"#F47245","Natural Products"
+"CS",5,74,1,"#FB9F59","Carbon Storage"
+"CP",6,70,1,"#FEC574","Coastal Protection"
