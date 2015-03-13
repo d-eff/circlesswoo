@@ -8,30 +8,66 @@ var width = 400,
     strank = "";
 
 var tip = d3.tip()
-            .attr('class', 'd3-tip')
-            .html(function(d) { return d.data.tooltip; })
-            .offset(function(d,n){ 
-              switch(n) {
-                case 0:
-                  return [10, 20]
-                  break;
-                case 1:
-                  return [90, 15];
-                  break;
-                case 2:
-                  return [70, 5];
-                  break;
-                case 3:
-                  return [70, -5];
-                  break;
-                case 4: 
-                  return [60, -20];
-                  break;
-                case 5:
-                  return [50, 5];
-                  break;
-              }
-            });
+    .attr('class', 'd3-tip')
+    .html(function(d) { return d.data.tooltip; })
+    .offset(function(d,n){ 
+      switch(n) {
+        case 0:
+          if(d.data.score === 30) {
+            return [10, 20];
+          } else if(d.data.score === 60) {
+            return [50,0];
+          } else {
+            return [70,-10];
+          }
+          break;
+        case 1:
+          if(d.data.score === 30) {
+            return [55,35];
+          } else if(d.data.score === 60) {
+            return [75,20];
+          } else {
+            return [90, 15];
+          }
+          break;
+        case 2:
+          if(d.data.score === 30) {
+            return [70,10];
+          } else if(d.data.score === 60) {
+            return [70, 0];
+          } else {
+            return [80,-15];
+          }
+          break;
+        case 3:
+          if(d.data.score === 30) {
+            return [70, -5];
+          } else if(d.data.score === 60) {
+            return [75,10];
+          } else {
+            return [80,20];
+          }
+          break;
+        case 4: 
+          if(d.data.score === 30) {
+            return [60, -20];
+          } else if(d.data.score === 60) {
+            return [80,0];
+          } else {
+            return [100,0];
+          }
+          break;
+        case 5:
+          if(d.data.score === 30) {
+            return [20,-10];
+          } else if(d.data.score === 60) {
+            return [50, 5];
+          } else {
+            return [90,20];
+          }
+          break;
+      }
+    });
 
 var pie = d3.layout.pie()
     .sort(null)
