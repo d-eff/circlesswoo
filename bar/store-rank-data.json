@@ -1,0 +1,15 @@
+{
+  "num_stores":1300,
+  "rank": 302,
+  "top":{
+    "store_num":265,
+    "manager": "Frank Blevin"
+  },
+  "store_num": 1264,
+  "address": "Jarmin Park",
+  "sister_stores": [
+    {"store_num": 789, "rank": 212},
+    {"store_num": 641, "rank": 700},
+    {"store_num": 544, "rank": 1101}
+  ]
+}

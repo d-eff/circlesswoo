@@ -1,0 +1,861 @@
+<html>
+<head>
+  <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+
+
+<style type="text/css">
+	@font-face {
+    	font-family: PNR;
+    	src: url('css/fonts/PNR.otf');
+	}
+	@font-face {
+    	font-family: PNS;
+    	src: url('css/fonts/PNS.otf');
+	}
+    @font-face {
+        font-family: 'ProximaNova-Regular';
+        src: url('css/fonts/PNR.otf');
+    }
+    @font-face {
+        font-family: 'ProximaNova-Semibold';
+        src: url('css/fonts/PNS.otf');
+    }
+	*, *::before, *::after {
+    box-sizing: content-box;
+	}
+	#strank .hoverCircle {
+		display: none;
+		width: 20px;
+		height: 20px;
+		position: absolute;
+	}
+	#strank .bubble {
+		background-image: url('bubble.svg');
+		background-repeat: no-repeat;
+		width: 80px;
+		height: 80px;
+		pointer-events: none;
+		font-family: "PNR";
+		text-align: right;
+		background-size: contain;
+		padding-right: 30px;
+	}
+	
+	#strank #chart_container {
+		width: 90%;
+		height: 422px;
+		margin: 20px auto;
+		position: relative;
+		padding-bottom: 82px;
+	}
+	#strank #info_bar {
+		float: left;
+		background-color: #087dd5;
+		width: 9.5%;
+		margin-right: .2%;
+		min-width: 60px;
+		height: 400px;
+		color: #fff;
+	}
+	#strank #chart_title {
+		position: absolute;
+		top: 0;
+		right: 0;
+		text-align: right;
+	}
+	#strank #chart_title h1 {
+		font-size: 42.82pt;
+		margin: 20px 10px 0 0;
+		line-height: 32.82pt;
+		color: #1e3163;
+		font-family: "PNS";
+	}
+	#strank #chart_title p {
+		margin-top: 0px;
+		font-size: 16px;
+		text-align: left;
+		font-family: "PNR";
+		color: #087dd5;
+	}
+	#strank #chart {
+		width: 98%;
+		height: 100%;
+		position: absolute;
+		top: 0;
+		left: 1%;
+		margin-top: 50px;
+	}
+	#strank #tout {
+		position: absolute;
+		top: 10%;
+		left: 1%;
+		font-family: "PNR";
+		font-size: 16px;
+		color: #087dd5;
+	}
+	#strank #store_rank {
+		position: absolute;
+		top: 80px;
+		left: 39%;
+		font-family: "PNR";
+		letter-spacing: -1px;
+		font-size: 12px;
+		color: #1e3163;
+		text-align: right;
+	}
+	#strank path:nth-of-type(62), #strank path:nth-of-type(67), #strank path:nth-of-type(89) {
+		cursor: pointer;
+	}
+	#strank path:nth-of-type(62):hover, #strank path:nth-of-type(67):hover, #strank path:nth-of-type(89):hover {
+		stroke: #49aaf2;
+	}
+
+
+	#strank .hash {
+		position: relative;
+		top: -18px;
+		left: -20px;
+		font-size: 14px;
+	}
+	#strank .number {
+		font-size: 40px;
+		position: relative;
+		left: -15px;
+	}
+	#strank .tout {
+		padding: 0;
+		margin: 0;
+	}
+	#strank .plan {
+		color: #1e3163;
+		margin-top: 0;
+		padding-top: 0;
+		font-family: "PNS";
+	}
+	#strank #store_one {
+		color: #fff;
+		font-family: "PNS";
+		position: absolute;
+		bottom: 0;
+		left: 1%;
+		height: 340px;
+		width: 4%;
+		z-index: 2;
+		font-size: 32px;
+		text-align: center;
+	}
+	#strank #store_one .store_one_hash {
+		font-size: 22px;
+		font-family: "PNR";
+		position: relative;
+		top: -8px;
+	}
+	#strank .vertical_type {
+		width: 260px;
+		transform: rotate(-90deg);
+		transform-origin: right top 0;
+		font-size: 18px;
+		position: absolute;
+		top: 50px;
+		left: -255px;
+		color: #194987;
+		font-family: "PNR";
+	}
+	#strank .vertical_type p {
+		padding: 0;
+		font-size: 22px;
+		line-height: 0;
+		text-align: left;
+	}
+	#strank .vertical_type p:nth-of-type(2) {
+		color: #fff;
+	}
+	#strank .rank_hash {
+		font-size: 32px;
+		color: #087dd5;
+		position: relative;
+		top: -20px;
+	}
+	#strank .rank_number {
+		font-size: 64px;
+		letter-spacing: -1px;
+		color: #087dd5;
+		font-family: "PNS";
+	}
+	#strank .store_rank_change {
+		font-family: "PNR";
+		color: #cee5f7;
+		font-size: 18px;
+	}
+	#strank .store_rank_change p {
+		padding: 0;
+		margin: 0;
+	}
+	#strank .store_rank_change p:nth-of-type(2) {
+		font-size: 12px;
+		letter-spacing: 0;
+	}
+	#strank #store_rank h3 {
+		margin-bottom: 0;
+	}
+	#strank .arrow {
+		margin-left: 10px;
+	}
+
+	#strank span.circle_num {
+		color: #fff;
+		position: relative;
+		top: 0;
+		left: 0;
+		text-align: right;
+	}
+	#strank .store_num_rank {
+		font-size: 22px;
+		color: #fff;
+		display: inline-block;
+		text-align: left;
+		padding-right: 15px;
+		padding-top: 15px;
+	}
+	#strank .store_num {
+		color: #fff;
+		text-align: left;
+		padding-left: 10px;
+	}
+	#strank .store_num span {
+		display: block;
+		text-align: left;
+	}	
+
+    #strank #chart_text {
+        position: absolute;
+        bottom: 20px;
+        left: 1.5%;
+        width: 98%;
+        z-index: 2;
+        opacity: 0;
+    }
+
+	</style>
+<script src="js/jquery.lazylinepainter-1.5.1.min.js"></script>
+<script>
+	jQuery('#cboxOverlay, #cboxClose, #sb_close').click(function(){
+		jQuery('body').css({'overflow' :'auto'});
+	});
+	jQuery(window).on("resize", function(){
+    jQuery.fn.colorbox.resize({       
+        width: "100%"
+		});
+	});
+</script>
+</head>
+<body>
+<div id="strank">
+<script>
+ var svgData = {
+    "chart": {
+        "strokepath": [
+        	{
+                "path": "M 30 400.955 L 30 86.205",
+                "duration": 600,
+                "strokeWidth":60,
+                "strokeColor":"#087dd5"
+            },
+            {
+                "path": "M 66.833 400.955 L 66.833 91.33",
+                "duration": 600
+            },
+            {
+                "path": "M 75.478 400.955 L 75.478 93.662",
+                "duration": 600
+            },
+            {
+                "path": "M 84.123 400.955 L 84.123 95.994",
+                "duration": 600
+            },
+            {
+                "path": "M 92.768 400.955 L 92.768 98.327",
+                "duration": 600
+            },
+            {
+                "path": "M 101.413 400.955 L 101.413 100.659",
+                "duration": 600
+            },
+            {
+                "path": "M 110.058 400.955 L 110.058 102.991",
+                "duration": 600
+            },
+            {
+                "path": "M 118.703 400.955 L 118.703 105.433",
+                "duration": 600
+            },
+            {
+                "path": "M 127.348 400.955 L 127.348 107.656",
+                "duration": 600
+            },
+            {
+                "path": "M 135.993 400.955 L 135.993 109.988",
+                "duration": 600
+            },
+            {
+                "path": "M 144.638 400.955 L 144.638 112.493",
+                "duration": 600
+            },
+            {
+                "path": "M 153.283 400.955 L 153.283 114.653",
+                "duration": 600
+            },
+            {
+                "path": "M 161.928 400.955 L 161.928 117.121",
+                "duration": 600
+            },
+            {
+                "path": "M 170.573 400.955 L 170.573 119.371",
+                "duration": 600
+            },
+            {
+                "path": "M 179.218 400.955 L 179.218 121.766",
+                "duration": 600
+            },
+            {
+                "path": "M 187.863 400.955 L 187.863 123.982",
+                "duration": 600
+            },
+            {
+                "path": "M 196.508 400.955 L 196.508 126.371",
+                "duration": 600
+            },
+            {
+                "path": "M 205.153 400.955 L 205.153 128.812",
+                "duration": 600
+            },
+            {
+                "path": "M 213.798 400.955 L 213.798 130.87",
+                "duration": 600
+            },
+            {
+                "path": "M 222.443 400.955 L 222.443 133.555",
+                "duration": 600
+            },
+            {
+                "path": "M 231.088 400.955 L 231.088 135.644",
+                "duration": 600
+            },
+            {
+                "path": "M 239.733 400.955 L 239.733 137.976",
+                "duration": 600
+            },
+            {
+                "path": "M 248.377 400.955 L 248.377 140.308",
+                "duration": 600
+            },
+            {
+                "path": "M 257.022 400.955 L 257.022 142.641",
+                "duration": 600
+            },
+            {
+                "path": "M 265.667 400.955 L 265.667 144.973",
+                "duration": 600
+            },
+            {
+                "path": "M 274.312 400.955 L 274.312 147.448",
+                "duration": 600
+            },
+            {
+                "path": "M 282.958 400.955 L 282.958 149.638",
+                "duration": 600
+            },
+            {
+                "path": "M 291.603 400.955 L 291.603 152.132",
+                "duration": 600
+            },
+            {
+                "path": "M 300.248 400.955 L 300.248 154.302",
+                "duration": 600
+            },
+            {
+                "path": "M 308.893 400.955 L 308.893 156.809",
+                "duration": 600
+            },
+            {
+                "path": "M 317.538 400.955 L 317.538 158.967",
+                "duration": 600
+            },
+            {
+                "path": "M 326.183 400.955 L 326.183 161.299",
+                "duration": 600
+            },
+            {
+                "path": "M 334.828 400.955 L 334.828 163.789",
+                "duration": 600
+            },
+            {
+                "path": "M 343.473 400.955 L 343.473 165.964",
+                "duration": 600
+            },
+            {
+                "path": "M 352.118 400.955 L 352.118 168.296",
+                "duration": 600
+            },
+            {
+                "path": "M 360.763 400.955 L 360.763 170.628",
+                "duration": 600
+            },
+            {
+                "path": "M 369.407 400.955 L 369.407 172.961",
+                "duration": 600
+            },
+            {
+                "path": "M 378.052 400.955 L 378.052 175.293",
+                "duration": 600
+            },
+            {
+                "path": "M 386.697 400.955 L 386.697 177.625",
+                "duration": 600
+            },
+            {
+                "path": "M 395.342 400.955 L 395.342 179.958",
+                "duration": 600
+            },
+            {
+                "path": "M 403.987 400.955 L 403.987 182.29",
+                "duration": 600
+            },
+            {
+                "path": "M 412.632,400.955 L 412.632 185.777",
+                "duration": 600,
+            },
+            {
+                "path": "M 421.277 400.955 L 421.277 187.173",
+                "duration": 600
+            },
+            {
+                "path": "M 429.922 400.955 L 429.922 189.857",
+                "duration": 600
+            },
+            {
+                "path": "M 438.567 400.955 L 438.567 191.62",
+                "duration": 600
+            },
+            {
+                "path": "M 447.212 400.955 L 447.212 193.952",
+                "duration": 600
+            },
+            {
+                "path": "M 455.857 400.955 L 455.857 196.284",
+                "duration": 600
+            },
+            {
+                "path": "M 464.502 400.955 L 464.502 198.616",
+                "duration": 600
+            },
+            {
+                "path": "M 473.147 400.955 L 473.147 200.949",
+                "duration": 600
+            },
+            {
+                "path": "M 481.792 400.955 L 481.792 203.907",
+                "duration": 600
+            },
+            {
+                "path": "M 490.437 400.955 L 490.437 205.929",
+                "duration": 600
+            },
+            {
+                "path": "M 499.082 400.955 L 499.082 207.946",
+                "duration": 600
+            },
+            {
+                "path": "M 507.727 400.955 L 507.727 210.551",
+                "duration": 600
+            },
+            {
+                "path": "M 516.372 400.955 L 516.372 212.61",
+                "duration": 600
+            },
+            {
+                "path": "M 525.017 400.955 L 525.017 215.177",
+                "duration": 600
+            },
+            {
+                "path": "M 533.662 400.955 L 533.662 217.922",
+                "duration": 600
+            },
+            {
+                "path": "M 542.307 400.955 L 542.307 219.607",
+                "duration": 600
+            },
+            {
+                "path": "M 550.952 400.955 L 550.952 221.939",
+                "duration": 600
+            },
+            {
+                "path": "M 559.597 400.955 L 559.597 224.567",
+                "duration": 600
+            },
+            {
+                "path": "M 568.242 400.955 L 568.242 226.674",
+                "duration": 600
+            },
+            {
+                "path": "M 576.887 400.955 L 576.887 229.205",
+                "duration": 600
+            },
+            {
+                "path": "M 585.532 400.955 L 585.532 231.269",
+                "duration": 600,
+                "strokeColor":"#91abbf"
+            },
+            {
+                "path": "M 594.177 400.955 L 594.177 233.887",
+                "duration": 600
+            },
+            {
+                "path": "M 602.822 400.955 L 602.822 235.934",
+                "duration": 600
+            },
+            {
+                "path": "M 611.467 400.955 L 611.467 238.438",
+                "duration": 600
+            },
+            {
+                "path": "M 620.112 400.955 L 620.112 241.187",
+                "duration": 600
+            },
+            {
+                "path": "M 628.757 400.955 L 628.757 242.871",
+                "duration": 600,
+                "strokeColor":"#91abbf"
+            },
+            {
+                "path": "M 637.402 400.955 L 637.402 245.263",
+                "duration": 600
+            },
+            {
+                "path": "M 646.047 400.955 L 646.047 247.595",
+                "duration": 600
+            },
+            {
+                "path": "M 654.692 400.955 L 654.692 249.928",
+                "duration": 600
+            },
+            {
+                "path": "M 663.337 400.955 L 663.337 252.26",
+                "duration": 600
+            },
+            {
+                "path": "M 671.982 400.955 L 671.982 254.592",
+                "duration": 600
+            },
+            {
+                "path": "M 680.627 400.955 L 680.627 256.924",
+                "duration": 600
+            },
+            {
+                "path": "M 689.271 400.955 L 689.271 259.257",
+                "duration": 600
+            },
+            {
+                "path": "M 697.917 400.955 L 697.917 261.589",
+                "duration": 600
+            },
+            {
+                "path": "M 706.562 400.955 L 706.562 264.226",
+                "duration": 600
+            },
+            {
+                "path": "M 715.207 400.955 L 715.207 266.254",
+                "duration": 600
+            },
+            {
+                "path": "M 723.852 400.955 L 723.852 268.586",
+                "duration": 600
+            },
+            {
+                "path": "M 732.497 400.955 L 732.497 270.918",
+                "duration": 600
+            },
+            {
+                "path": "M 741.142 400.955 L 741.142 273.25",
+                "duration": 600
+            },
+            {
+                "path": "M 749.787 400.955 L 749.787 275.583",
+                "duration": 600
+            },
+            {
+                "path": "M 758.432 400.955 L 758.432 277.915",
+                "duration": 600
+            },
+            {
+                "path": "M 767.077 400.955 L 767.077 280.278",
+                "duration": 600
+            },
+            {
+                "path": "M 775.722 400.955 L 775.722 282.642",
+                "duration": 600
+            },
+            {
+                "path": "M 784.367 400.955 L 784.367 284.913",
+                "duration": 600
+            },
+            {
+                "path": "M 793.012 400.955 L 793.012 287.245",
+                "duration": 600
+            },
+            {
+                "path": "M 801.656 400.955 L 801.656 289.577",
+                "duration": 600
+            },
+            {
+                "path": "M 810.302 400.955 L 810.302 292.182",
+                "duration": 600
+            },
+            {
+                "path": "M 818.946 400.955 L 818.946 294.241",
+                "duration": 600,
+                "strokeColor":"#91abbf"
+            },
+            {
+                "path": "M 827.592 400.955 L 827.592 296.78",
+                "duration": 600
+            },
+            {
+                "path": "M 836.236 400.955 L 836.236 298.906",
+                "duration": 600
+            },
+            {
+                "path": "M 844.882 400.955 L 844.882 301.239",
+                "duration": 600
+            },
+            {
+                "path": "M 853.526 400.955 L 853.526 303.571",
+                "duration": 600
+            },
+            {
+                "path": "M 862.172 400.955 L 862.172 305.903",
+                "duration": 600
+            },
+            {
+                "path": "M 870.816 400.955 L 870.816 308.235",
+                "duration": 600
+            },
+            {
+                "path": "M 879.462 400.955 L 879.462 310.704",
+                "duration": 600
+            },
+            {
+                "path": "M 888.106 400.955 L 888.106 313.051",
+                "duration": 600
+            },
+            {
+                "path": "M 896.752 400.955 L 896.752 315.232",
+                "duration": 600
+            },
+            {
+                "path": "M 905.396 400.955 L 905.396 317.565",
+                "duration": 600
+            },
+            {
+                "path": "M 914.041 400.955 L 914.041 320.073",
+                "duration": 600
+            },
+            {
+                "path": "M 922.687 400.955 L 922.687 322.229",
+                "duration": 600
+            },
+            {
+                "path": "M 931.331 400.955 L 931.331 324.562",
+                "duration": 600
+            },
+            {
+                "path": "M 939.977 400.955 L 939.977 326.894",
+                "duration": 600
+            },
+            {
+                "path": "M 948.621 400.955 L 948.621 329.377",
+                "duration": 600
+            },
+            {
+                "path": "M 957.267 400.955 L 957.267 331.559",
+                "duration": 600
+            },
+            {
+                "path": "M 965.911 400.955 L 965.911 334.026",
+                "duration": 600
+            },
+            {
+                "path": "M 974.557 400.955 L 974.557 336.414",
+                "duration": 600
+            },
+            {
+                "path": "M 983.201 400.955 L 983.201 338.556",
+                "duration": 600
+            },
+            {
+                "path": "M 991.847 400.955 L 991.847 340.888",
+                "duration": 600
+            },
+            {
+                "path": "M 1000.491 400.955 L 1000.491 343.22",
+                "duration": 600
+            },
+            {
+                "path": "M 1009.137 400.955 L 1009.137 345.553",
+                "duration": 600
+            },
+            {
+                "path": "M 1017.781 400.955 L 1017.781 347.885",
+                "duration": 600
+            },
+            {
+                "path": "M 1026.426 400.955 L 1026.426 350.391",
+                "duration": 600
+            },
+            {
+                "path": "M 1035.071 400.955 L 1035.071 352.55",
+                "duration": 600
+            },
+            {
+                "path": "M 1043.716 400.955 L 1043.716 354.882",
+                "duration": 600
+            },
+            {
+                "path": "M 1052.361 400.955 L 1052.361 357.214",
+                "duration": 600
+            },
+            {
+                "path": "M 1061.006 400.955 L 1061.006 359.546",
+                "duration": 600
+            },
+            {
+                "path": "M 1069.651 400.955 L 1069.651 361.879",
+                "duration": 600
+            },
+            {
+                "path": "M 1078.296 400.955 L 1078.296 364.211",
+                "duration": 600
+            },
+            {
+                "path": "M 1086.941 400.955 L 1086.941 366.543",
+                "duration": 600
+            },
+            {
+                "path": "M 1095.586 400.955 L 1095.586 368.876",
+                "duration": 600
+            },
+            {
+                "path": "M 1104.231 400.955 L 1104.231 370.921",
+                "duration": 600
+            },
+            {
+                "path": "M 1112.876 400.955 L 1112.876 373.541",
+                "duration": 600
+            },
+            {
+                "path": "M 1121.521 400.955 L 1121.521 375.673",
+                "duration": 600
+            },
+            {
+                "path": "M 1130.166 400.955 L 1130.166 378.205",
+                "duration": 600
+            }
+        ],
+        "dimensions": {
+            "width": 1134,
+            "height": 401
+        }
+    }
+}; 
+ 
+ 
+jQuery(document).ready(function(){ 
+	num = 0;
+
+    jQuery('#chart_text').delay(200).animate({"opacity":"1"},500);
+
+
+	var placeHover = function(){
+    winHeight = jQuery('#chart').find('svg').height()-20;
+    jQuery('#chart_container').css({"height":winHeight});
+
+		var $one = jQuery( "#strank #chart").find("path:eq(61)")
+      $one.attr("class","hoverSection");
+		var $two = jQuery( "#strank #chart").find("path:eq(66)")
+      $two.attr("class","hoverSection");
+		var $three = jQuery( "#strank #chart").find("path:eq(88)")
+      $three.attr("class","hoverSection");
+
+		jQuery('.hoverSection').each(function() {
+			fromLeft = jQuery(this).offset().left-92;
+			num = num+1;
+			jQuery(this).parent().parent().append('<div class="hoverCircle num_'+num+' bubble" style="left:'+fromLeft+'px"><span class="circle_num">#</span><div class="store_num_rank">212</div><div class="store_num">Store:<span>789</span></div></div>');
+		});
+
+		$one.mouseenter(function(e) {
+			$('.num_1').stop().fadeIn('slow');
+			$('.num_1').css({"bottom":'40%', "left":e.offsetX});
+		})
+		.mouseleave(function() {
+			$('.num_1').stop().fadeOut('slow');
+		});
+
+		$two.mouseenter(function(e) {
+			$('.num_2').fadeIn('slow');
+			$('.num_2').css({"bottom":'35%', "left":e.offsetX});
+		})
+		.mouseleave(function() {
+			$('.num_2').fadeOut('slow');
+		});
+		$three.mouseenter(function(e) {
+			$('.num_3').fadeIn('slow');
+			$('.num_3').css({"bottom":'30%', "left":e.offsetX});
+		})
+		.mouseleave(function() {
+			$('.num_3').delay(200).fadeOut('slow');
+		});
+
+
+
+	};
+
+	jQuery('#chart').lazylinepainter({"svgData": svgData,"strokeWidth": 6,"strokeColor": "#9ac9ee","strokeCap":"butt","responsive":true,"drawSequential":false,"onComplete":placeHover}).lazylinepainter('paint'); 
+
+
+});
+
+jQuery(window).resize(function() {
+    winHeight = jQuery('#chart').find('svg').height()-20;
+    jQuery('#chart_container').css({"height":winHeight});
+})
+
+
+
+</script>
+
+
+
+<div style="">
+  <div id="chart_container">
+    <div id="chart_text" style="pointer-events: none;"> <svg viewBox="0 0 1119.936 347.769">
+      <text transform="matrix(-4.371139e-08 -1 1 -4.371139e-08 1117.416 324.7329)" fill="#91abbd" font-family="'ProximaNova-Semibold'" font-size="12">1300</text>
+      <text transform="matrix(1 0 0 1 0 70.5107)" fill="#ffffff" font-family="'ProximaNova-Semibold'" font-size="21">#</text>
+      <text transform="matrix(1 0 0 1 14.666 83.229)" fill="#ffffff" font-family="'ProximaNova-Semibold'" font-size="36" letter-spacing="-1">1</text>
+      <text transform="matrix(-4.371139e-08 -1 1 -4.371139e-08 25.6914 327.769)" fill="#1e3262" font-family="'ProximaNova-Regular'" font-size="21">London Store: 265</text>
+      <text transform="matrix(0 -1 1 0 38.6655 327.7681)" fill="#ffffff" font-family="'ProximaNova-Semibold'" font-size="15">Manager: Frank Blevin</text>
+      </svg> </div>
+    <div id="tout">
+      <h2 class="tout">Want your group <span class="hash">#</span><span class="number">1</span></h2>
+      <p class="plan">Let's Build a Plan</p>
+    </div>
+    <div id="chart_title">
+      <h1>See how<br>your stores<br>stack up</h1>
+    </div>
+    
+    <!-- #chart gets SVG inserted into it -->
+    <div id="chart"></div>
+  </div>
+</div>
+</div>
+</body>
+</html>
