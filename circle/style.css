@@ -14,6 +14,10 @@ body {
   fill: orange;
 }
 
+svg {
+  background: url(labels.png) 8px 14px no-repeat;
+}
+
 .good:hover {
   fill: rgba(152,255,213,0.7);
 }

@@ -260,27 +260,6 @@ d3.json('data.json', function(error, dat) {
       .attr("class", outers[5])
       .attr("d", bottom);
 
-  svg.append("text")
-      .attr("x", 150)
-      .attr("dy", -10)
-    .append("textPath")
-      .attr("stroke","white")
-      .attr("xlink:href","#topRight")
-      .text("Late Additions");
-  svg.append("text")
-      .attr("x", 150)
-      .attr("dy", -10)
-    .append("textPath")
-      .attr("stroke","white")
-      .attr("xlink:href","#bottom")
-      .text("Transfers In");
-  svg.append("text")
-      .attr("x", 150)
-      .attr("dy", -10)
-    .append("textPath")
-      .attr("stroke","white")
-      .attr("xlink:href","#topLeft")
-      .text("Order Modifications");
 
 
   //outermost circle
