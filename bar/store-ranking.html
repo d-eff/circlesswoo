@@ -106,14 +106,12 @@
 		color: #1e3163;
 		text-align: right;
 	}
-	#strank path:nth-of-type(2), #strank path:nth-of-type(7), #strank path:nth-of-type(120) {
+	#strank .hoverSection {
 		cursor: pointer;
-    stroke: blue;
-    fill: red;
+    stroke: #91abbf;
 	}
-	#strank path:nth-of-type(2):hover, #strank path:nth-of-type(7):hover, #strank path:nth-of-type(120):hover {
-		stroke: red;
-		fill: red;
+	#strank .hoverSection:hover {
+    stroke: #49aaf2;
 	}
 
 
@@ -247,11 +245,6 @@
 <script>
 	jQuery('#cboxOverlay, #cboxClose, #sb_close').click(function(){
 		jQuery('body').css({'overflow' :'auto'});
-	});
-	jQuery(window).on("resize", function(){
-    jQuery.fn.colorbox.resize({       
-        width: "100%"
-		});
 	});
 </script>
 </head>
@@ -428,10 +421,8 @@
                 "duration": 600
             },
             {
-                "path": "M412.632,400.955V84.539l0,0   C415.084,39.873,453.302,3,498.878,3c47.633,0,86.247,38.614,86.247,86.247s-38.614,86.247-86.247,86.247h-60.311",
-                "duration": 1500,
-                "strokeColor":"#1e3163",
-                "strokeCap":"round"
+                "path": "M 412.632 400.955 L 412.632 185.11",
+                "duration": 600,
             },
             {
                 "path": "M 421.277 400.955 L 421.277 187.173",
@@ -775,24 +766,46 @@
  
  
 jQuery(document).ready(function(){ 
-	num = 0;
+	  num = 0;
+    var num_stores,
+        stores_per_block,
+        sisters = [],
+        main_pos;
+        
 
     jQuery('#chart_text').delay(200).animate({"opacity":"1"},500);
+    
 
+    var processData = function(data) {
+      num_stores = data.num_stores;
+      stores_per_block = num_stores/125;
+      main_pos = Math.round(data.rank/stores_per_block);
+      data.sister_stores.forEach(function(v, n){
+        var out = {
+          "store_num": v.store_num,
+          "pos": Math.round(v.rank/stores_per_block),
+          "rank": v.rank
+        }
+        sisters.push(out);
+      });
+	  jQuery('#chart').lazylinepainter({"svgData": svgData,"strokeWidth": 6,"strokeColor": "#9ac9ee","strokeCap":"butt","responsive":true,"drawSequential":false,"onComplete":placeHover}).lazylinepainter('paint'); 
+    }
 
 	var placeHover = function(){
 
-		var $one = jQuery( "#strank #chart").find("path:eq(61)")
+		var $one = jQuery( "#strank #chart").find("path:eq("+sisters[0].pos+ ")")
       $one.attr("class","hoverSection");
 		var $two = jQuery( "#strank #chart").find("path:eq(66)")
       $two.attr("class","hoverSection");
 		var $three = jQuery( "#strank #chart").find("path:eq(88)")
       $three.attr("class","hoverSection");
 
-		jQuery('.hoverSection').each(function() {
+		jQuery('.hoverSection').each(function(n) {
 			fromLeft = jQuery(this).offset().left-92;
 			num = num+1;
-			jQuery(this).parent().parent().append('<div class="hoverCircle num_'+num+' bubble" style="left:'+fromLeft+'px"><span class="circle_num">#</span><div class="store_num_rank">212</div><div class="store_num">Store:<span>789</span></div></div>');
+			jQuery(this).parent().parent().append(
+          "<div class=\"hoverCircle num_"+num+" bubble\" style=\"left:"+fromLeft+"px\"><span class=\"circle_num\">#</span><div class=\"store_num_rank\">"+sisters[n].rank +"</div><div class=\"store_num\">Store:<span>" + sisters[n].store_num + "</span></div></div>"
+          );
 		});
 
 		$one.mouseenter(function(e) {
@@ -819,11 +832,17 @@ jQuery(document).ready(function(){
 		});
 
 
+		var $main = jQuery( "#strank #chart").find("path:eq("+main_pos+ ")");
+    $main.css({"stroke":"red"});
+    console.log($main);
+    $main.replaceWith('<path d="M412.632,400.955V84.539l0,0 C415.084,39.873,453.302,3,498.878,3c47.633,0,86.247,38.614,86.247,86.247s-38.614,86.247-86.247,86.247h-60.311" style="strokeColor:#1e3163" stroke="#9ac9ee" fill-opacity="0" stroke-opacity="1" stroke-width="6" stroke-linecap="butt" stroke-linejoin="round" class="fick">');
+
 
 	};
 
-	jQuery('#chart').lazylinepainter({"svgData": svgData,"strokeWidth": 6,"strokeColor": "#9ac9ee","strokeCap":"butt","responsive":true,"drawSequential":false,"onComplete":placeHover}).lazylinepainter('paint'); 
-
+  jQuery.getJSON('store-rank-data.json', function(data){ 
+    processData(data);
+  });
 
 });
 
